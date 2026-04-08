@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>kusoweb</title>
+  <meta name="theme-color" content="#111111" />
+  <style>
+    :root{
+      --bg:#0f0f12;
+      --panel:#17171c;
+      --panel-2:#1f1f27;
+      --text:#f8f8fb;
+      --muted:#b8b8c7;
+      --line:rgba(255,255,255,.08);
+      --accent:#8b5cf6;
+      --accent-2:#22c55e;
+      --danger:#ef4444;
+      --shadow:0 14px 36px rgba(0,0,0,.35);
+      --radius:22px;
+      --max:520px;
+    }
+
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{
+      margin:0;
+      background:
+        radial-gradient(circle at top right, rgba(139,92,246,.22), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(34,197,94,.12), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
+    }
+
+    body{
+      min-height:100dvh;
+      display:flex;
+      justify-content:center;
+      padding:16px 14px calc(22px + env(safe-area-inset-bottom));
+    }
+
+    .app{
+      width:100%;
+      max-width:var(--max);
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#8b5cf6,#ec4899);
+      box-shadow:var(--shadow);
+      font-size:22px;
+    }
+
+    .title-wrap{
+      min-width:0;
+    }
+
+    h1{
+      margin:0;
+      font-size:1.18rem;
+      line-height:1.1;
+      letter-spacing:.02em;
+    }
+
+    .sub{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:.84rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .pill{
+      flex-shrink:0;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.78rem;
+      font-weight:700;
+    }
+
+    .card{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .media-wrap{
+      position:relative;
+      aspect-ratio:1/1;
+      background:#0c0c10;
+    }
+
+    .media{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .badge{
+      position:absolute;
+      top:12px;
+      left:12px;
+      z-index:2;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      backdrop-filter:blur(8px);
+      color:#fff;
+      font-size:.74rem;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.14);
+    }
+
+    .body{
+      padding:16px;
+    }
+
+    .kicker{
+      color:#bfa7ff;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+
+    .headline{
+      margin:0 0 10px;
+      font-size:1.35rem;
+      line-height:1.3;
+    }
+
+    .desc{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.96rem;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:15px 14px;
+      border-radius:16px;
+      font-size:1rem;
+      font-weight:800;
+      transition:transform .08s ease, opacity .15s ease, filter .15s ease;
+    }
+
+    button:active{
+      transform:scale(.98);
+    }
+
+    .primary{
+      background:linear-gradient(135deg,var(--accent),#ec4899);
+      color:#fff;
+    }
+
+    .secondary{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .footer-box{
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px dashed rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:.9rem;
+      line-height:1.7;
+    }
+
+    .mini{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .tag{
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      color:#d7d7e5;
+      font-size:.8rem;
+      font-weight:700;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:calc(16px + env(safe-area-inset-bottom));
+      transform:translateX(-50%) translateY(20px);
+      opacity:0;
+      pointer-events:none;
+      background:rgba(0,0,0,.78);
+      color:#fff;
+      padding:11px 14px;
+      border-radius:999px;
+      font-size:.88rem;
+      font-weight:700;
+      transition:.22s ease;
+      backdrop-filter:blur(8px);
+      border:1px solid rgba(255,255,255,.1);
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media (max-width:360px){
+      .headline{font-size:1.18rem;}
+      .desc{font-size:.92rem;}
+      button{font-size:.94rem;}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">💥</div>
+        <div class="title-wrap">
+          <h1>kusoweb</h1>
+          <div class="sub">押したら何か出る、ただそれだけの世界</div>
+        </div>
+      </div>
+      <div class="pill">ver. 1</div>
+    </header>
+
+    <section class="card">
+      <div class="media-wrap">
+        <div class="badge" id="badge">本日のネタ</div>
+        <img id="memeImage" class="media" alt="ネタ画像" />
+      </div>
+
+      <div class="body">
+        <div class="kicker">KUSO CONTENT</div>
+        <h2 class="headline" id="memeTitle">読み込み中…</h2>
+        <p class="desc" id="memeText">しばらく待つと、ちゃんとくだらないものが出ます。</p>
+
+        <div class="controls">
+          <button class="primary" id="shuffleBtn">🎲 ランダム</button>
+          <button class="secondary" id="copyBtn">🔗 URLコピー</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-box">
+      QRで飛んできた人が、ただ一瞬だけ「なんやこれ」となる用のページ。<br />
+      画像や文言はあとで好きに差し替えればOK。
+      <div class="mini">
+        <span class="tag">スマホ向け</span>
+        <span class="tag">1ファイル完結</span>
+        <span class="tag">GitHub Pages向け</span>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">コピーした</div>
+
+  <script>
+    const memes = [
+      {
+        id: "boss",
+        badge: "上司の圧",
+        title: "朝イチの『ちょっといい？』が一番こわい",
+        text: "まだ何もしてないのに、なぜか反省会の顔だけは準備できている。",
+        image: makeSvg("朝イチ会議", "#8b5cf6", "#ec4899", "💼")
+      },
+      {
+        id: "monday",
+        badge: "社会の現実",
+        title: "月曜日、存在そのものが説明不足",
+        text: "カレンダーの都合だけで感情を破壊してくる、静かな災害。",
+        image: makeSvg("月曜", "#0ea5e9", "#22c55e", "📅")
+      },
+      {
+        id: "ramen",
+        badge: "食欲の逆襲",
+        title: "夜中のラーメン案、毎回プレゼンが強すぎる",
+        text: "理性の承認フローを無視して、脳内で勝手に可決される。",
+        image: makeSvg("夜食", "#f97316", "#ef4444", "🍜")
+      },
+      {
+        id: "charge",
+        badge: "限界",
+        title: "スマホ残り2%と人間のメンタルは似ている",
+        text: "どちらも急に暗くなるし、やたら省エネ発言が増える。",
+        image: makeSvg("2%", "#111827", "#6b7280", "🔋")
+      },
+      {
+        id: "qr",
+        badge: "QRの向こう側",
+        title: "わざわざ読み込んでこれを見ている時点で、もう仲間",
+        text: "ここまで来たら引き返せない。次のくだらなさへ進んでほしい。",
+        image: makeSvg("読み込んだ先", "#14b8a6", "#06b6d4", "📱")
+      }
+    ];
+
+    const badgeEl = document.getElementById("badge");
+    const imageEl = document.getElementById("memeImage");
+    const titleEl = document.getElementById("memeTitle");
+    const textEl = document.getElementById("memeText");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const toastEl = document.getElementById("toast");
+
+    let currentIndex = 0;
+
+    function makeSvg(label, color1, color2, emoji){
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${color1}"/>
+              <stop offset="100%" stop-color="${color2}"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="1200" fill="url(#g)"/>
+          <circle cx="1040" cy="180" r="150" fill="rgba(255,255,255,.15)"/>
+          <circle cx="180" cy="1020" r="180" fill="rgba(255,255,255,.10)"/>
+          <text x="600" y="470" text-anchor="middle" font-size="220">${emoji}</text>
+          <text x="600" y="690" text-anchor="middle" font-size="86" font-family="Arial, sans-serif" font-weight="700" fill="white">${label}</text>
+          <text x="600" y="790" text-anchor="middle" font-size="42" font-family="Arial, sans-serif" fill="rgba(255,255,255,.92)">kusoweb</text>
+        </svg>
+      `;
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    }
+
+    function render(index){
+      const item = memes[index];
+      badgeEl.textContent = item.badge;
+      imageEl.src = item.image;
+      titleEl.textContent = item.title;
+      textEl.textContent = item.text;
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("m", item.id);
+      history.replaceState({}, "", url.toString());
+    }
+
+    function randomIndex(except){
+      if(memes.length <= 1) return 0;
+      let next = except;
+      while(next === except){
+        next = Math.floor(Math.random() * memes.length);
+      }
+      return next;
+    }
+
+    function showToast(text){
+      toastEl.textContent = text;
+      toastEl.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toastEl.classList.remove("show");
+      }, 1400);
+    }
+
+    shuffleBtn.addEventListener("click", () => {
+      currentIndex = randomIndex(currentIndex);
+      render(currentIndex);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(window.location.href);
+        showToast("URLをコピーした");
+      }catch{
+        showToast("コピーできなかった");
+      }
+    });
+
+    function boot(){
+      const params = new URLSearchParams(location.search);
+      const target = params.get("m");
+      const found = memes.findIndex(v => v.id === target);
+      currentIndex = found >= 0 ? found : Math.floor(Math.random() * memes.length);
+      render(currentIndex);
+    }
+
+    boot();
+  </script>
+</body>
+</html>
